@@ -1,0 +1,3 @@
+EDBP_KEY="epdb_live_ZOmTX6UcUeGVAQ_Ac3oXK3f-0A66giIs"
+GEMINI_KEY=""
+TIGER_CONNECTION = "dbname=tsdb user=tsdbadmin password=vubnihuy8ca2mr0s host=hdva38k4vr.f3q48ob3rs.tsdb.cloud.timescale.com port=39590 sslmode=require"
