@@ -8,7 +8,6 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).with_name("tiger-cloud-faerity-credentials.env"))
 
-
 async def main():
     conn = await asyncpg.connect(
         host=os.environ["PGHOST"],
