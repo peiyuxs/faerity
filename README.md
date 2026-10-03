@@ -1,5 +1,65 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Python / Tiger Cloud Setup
+
+The Python script connects to Tiger Cloud using `asyncpg`. Use Python 3.10 or newer. Run these commands from the project folder (the folder containing `requirements.txt`).
+
+### 1. Create the virtual environment
+
+Create it once per checkout. On Windows, use PowerShell:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+On macOS/Linux, use a terminal:
+
+```sh
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+In Git Bash on Windows, activate it with `source .venv/Scripts/activate`.
+
+### 2. Install Python packages
+
+With the environment activated, install the dependencies:
+
+```sh
+python -m pip install -r requirements.txt
+```
+
+The environment name `(.venv)` should appear at the start of the terminal prompt. To leave it later, run `deactivate`.
+
+### 3. Add Tiger Cloud credentials
+
+Get the database credentials from the team’s approved secure channel. Copy [tiger-cloud-faerity-credentials.example.env](tiger-cloud-faerity-credentials.example.env) to `tiger-cloud-faerity-credentials.env`, then replace the example values with the real `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and `PGSSLMODE` values. Keep the real credentials file private; it is excluded from Git.
+
+Copy command in PowerShell:
+
+```powershell
+Copy-Item tiger-cloud-faerity-credentials.example.env tiger-cloud-faerity-credentials.env
+```
+
+Copy command in macOS/Linux/Git Bash:
+
+```sh
+cp tiger-cloud-faerity-credentials.example.env tiger-cloud-faerity-credentials.env
+```
+
+### 4. Test the connection
+
+With `.venv` active and the credentials file filled in, run:
+
+```sh
+python main.py
+```
+
+A successful connection prints a success message and the PostgreSQL server version. If Python cannot find a package, confirm `.venv` is active and repeat the install command. In VS Code, select `.venv/Scripts/python.exe` on Windows or `.venv/bin/python` on macOS/Linux using **Python: Select Interpreter**.
+
+Activation is optional if you invoke the environment's Python directly: on Windows run `.venv/Scripts/python.exe main.py`; on macOS/Linux run `.venv/bin/python main.py`.
+
 ## Getting Started
 
 First, run the development server:
