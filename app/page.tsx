@@ -1,32 +1,71 @@
+'use client';
 import Image from "next/image";
-
+import { useState } from "react";
 export default function Home() {
-  return (
-    <div className="flex flex-col flex-1 items-center justify-center">
-      <main className="flex flex-1 w-full flex-col items-center justify-between py-32 px-16">
-        {/* Banner */}
-        <div className="Banner text-4xL font-bold text-#85b19b background-#4e314f">
-          Faerity
-        </div>
-        {/*popular recipes / recipe per season or something idk chat*/}
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            Popular recipes
-          </h1>
-          {/* carousel of the recipes */}
 
-          {/*DISCLAIMER CUZ WE AINT KILLING NOBODY*/}
-          <p className="text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            We are not responsible for any harm caused by the recipes on this website. Please use caution and follow all safety guidelines when preparing and consuming food.
-            There could be mistakes within the plants information porvided, please do your own research and use your own discretion when using the information provided.
-          </p>
+  const slides = [
+    { title: "Slide 1", text: "This is the first slide content." },
+    { title: "Slide 2", text: "This is the second slide content." },
+    { title: "Slide 3", text: "This is the third slide content." },
+  ];
+
+  const [index, setIndex] = useState(0);
+
+  const next = () => setIndex((index + 1) % slides.length);
+  const prev = () => setIndex((index - 1 + slides.length) % slides.length);
+  return (
+    <div className="min-h-screen flex flex-col bg-gray-100">
+
+      {/* Banner */}
+      <header className="bg-[#4e314f] text-white py-20">
+        <div className="max-w-6xl mx-auto px-5">
+          <h1 className="text-2xl font-semibold" style={{color: 'var(--foreground)', textAlign: 'center'}}>
+            Faerity
+          </h1>
         </div>
-        {/* Footer  (mmmm feet~)*/}
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-         meow
-          meow
+      </header>
+
+      {/* Carousel */}
+      <main className="max-w-6xl mx-auto px-4 py-10 flex-1">
+        <h2 className="text-3xl font-bold mb-6 text-gray-800">Popular Recipes</h2>
+
+        <div className="relative overflow-hidden">
+          <div
+            className="flex transition-transform duration-500"
+            style={{ transform: `translateX(-${index * 100}%)` }}
+          >
+            {slides.map((slide, i) => (
+              <div key={i} className="min-w-full bg-white rounded-lg shadow p-6">
+                <h3 className="text-xl font-semibold mb-2">{slide.title}</h3>
+                <p className="text-gray-600">{slide.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={prev}
+              className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
+            >
+              Prev
+            </button>
+            <button
+              onClick={next}
+              className="px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700"
+            >
+              Next
+            </button>
+          </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-gray-300 py-6">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <p className="text-sm">Disclaimer: Please be wary of trying a new plant due to the potential risks involved.
+            Some of these plants can be toxic or cause allergic reactions.</p>
+        </div>
+      </footer>
     </div>
   );
 }
