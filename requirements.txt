@@ -1,3 +1,5 @@
 asyncpg
 python-dotenv
 google-genai
+libzim
+beautifulsoup4

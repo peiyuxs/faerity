@@ -59,6 +59,41 @@ async def upsert_plants(rows):
         await conn.close()
 
 
+async def insert_plants_if_missing(rows, batch_size=500):
+    """Insert rows without changing any plant already in the database."""
+    if not rows:
+        return 0
+
+    conn = await get_conn()
+    inserted = 0
+    try:
+        async with conn.transaction():
+            for start in range(0, len(rows), batch_size):
+                batch = rows[start : start + batch_size]
+                row_placeholders = []
+                args = []
+                for row in batch:
+                    placeholders = []
+                    for value in row:
+                        args.append(value)
+                        placeholders.append(f"${len(args)}")
+                    row_placeholders.append(f"({', '.join(placeholders)})")
+
+                inserted_rows = await conn.fetch(
+                    f"""
+                    INSERT INTO plants ({", ".join(FIELDS)})
+                    VALUES {", ".join(row_placeholders)}
+                    ON CONFLICT (id) DO NOTHING
+                    RETURNING id
+                    """,
+                    *args,
+                )
+                inserted += len(inserted_rows)
+        return inserted
+    finally:
+        await conn.close()
+
+
 async def get_plant(plant_id):
     conn = await get_conn()
     try:

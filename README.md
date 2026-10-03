@@ -60,47 +60,29 @@ A successful connection prints a success message and the PostgreSQL server versi
 
 Activation is optional if you invoke the environment's Python directly: on Windows run `.venv/Scripts/python.exe main.py`; on macOS/Linux run `.venv/bin/python main.py`.
 
-### 5. Set up and test Gemini (Google Cloud ADC)
+### 5. Set up and test Gemini
 
-The organization policy shown in the console disallows API keys, so use Application Default Credentials (ADC) instead. No Gemini API key is needed. Your Google Cloud project must have billing enabled, the Vertex AI API enabled, and your account granted the **Vertex AI User** role (`roles/aiplatform.user`). Ask your Google Cloud administrator to enable/grant these if you do not have permission.
+Get a Gemini API key from [Google AI Studio](https://aistudio.google.com/apikey). Copy [gemini.env.example](gemini.env.example) to `.env`, then replace the placeholder for `GEMINI_KEY` with your own key. `.env` is ignored by Git; do not commit it or share the key. Each teammate should use their own authorized key.
 
-1. Install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) for Windows, then open a **new** terminal.
-2. Sign in to the CLI and choose the Google Cloud project to use:
+Copy in PowerShell:
 
-	```powershell
-	gcloud init
-	```
+```powershell
+Copy-Item gemini.env.example .env
+```
 
-3. Create local ADC credentials for the Python client (this opens a Google sign-in page):
+Copy in macOS/Linux/Git Bash:
 
-	```powershell
-	gcloud auth application-default login
-	```
+```sh
+cp gemini.env.example .env
+```
 
-	`gcloud init` alone is not enough; Python client libraries use the separate ADC login above.
+With `.venv` active, run `python gemini.py` (or `.venv/Scripts/python.exe gemini.py` on Windows without activating). The script sends a short prompt to Gemini and prints the response; API access and usage limits may apply. If it reports `Missing GEMINI_KEY`, check that `.env` exists in the project folder and that the key value is filled in.
 
-4. In the project-root `.env` file, set your Google Cloud **project ID** (not its display name) and the location approved for your model. The default in this script is `global`:
+### 6. Import plants from the offline Edible Plant Database archive
 
-	```dotenv
-	GOOGLE_CLOUD_PROJECT=your-google-cloud-project-id
-	GOOGLE_CLOUD_LOCATION=global
-	```
+Place the complete `edibleplantdb.zim` archive in the project folder. Run `python seed.py` first to parse and validate the archive locally; this default dry run does not connect to Tiger Cloud. To insert a small test batch, run `python seed.py --apply --limit 5`. To import all records, run `python seed.py --apply`. Existing plant IDs are skipped and never overwritten. The importer reads text only and does not import archive images.
 
-	The `.env` file is ignored by Git. Do not put credentials in it or commit it. Remove the old `GEMINI_KEY` entry; API-key authentication is not used by this script.
-
-5. With `.venv` active, test it from the project folder:
-
-	```powershell
-	python gemini.py
-	```
-
-	Or without activating the environment:
-
-	```powershell
-	.\.venv\Scripts\python.exe gemini.py
-	```
-
-The script should print Gemini's response. Requests go through the selected Google Cloud project and may incur charges. For teammates, each person should install the CLI and run the ADC login with their own Google account; do not share ADC credential files. See Google's [ADC setup](https://docs.cloud.google.com/docs/authentication/provide-credentials-adc) and [Agent Platform quickstart](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/start) for details.
+The archive's licensing page states that core plant data is provided for educational/non-commercial use and attributes it to Food Plants International / Bruce French. Check the source terms before using this data commercially, and retain that attribution when redistributing it.
 
 ## Getting Started
 
