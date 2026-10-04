@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
-import Marquee from "react-fast-marquee";
 import PlantCard from "@/app/components/plantCard";
 import type { Plant } from "@/lib/plants";
 
@@ -105,20 +104,6 @@ export default function PopularPlants() {
               className="shrink-0 cursor-pointer border-y-[14px] border-y-transparent border-l-[20px] border-l-pink"
             />
           </div>
-          <h2 className="mb-6 mt-10 text-5xl md:text-8xl">
-            Explore All Plants
-          </h2>
-          <Marquee
-            autoFill
-            pauseOnHover
-            speed={35}
-            gradient={false}
-            className="py-2"
-          >
-            {plants.map((plant) => (
-              <PlantCard key={plant.id} plant={plant} />
-            ))}
-          </Marquee>
         </>
       )}
     </section>

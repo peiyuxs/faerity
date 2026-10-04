@@ -1,6 +1,6 @@
 import PlantOfHour from "@/app/components/plantOfHour";
-import PlantOfDay from "@/app/components/plantOfHour";
 import PopularPlants from "@/app/components/popularPlants";
+import ExplorePlants from "@/app/components/explorePlants";
 
 export default function Home() {
   return (
@@ -30,6 +30,7 @@ export default function Home() {
       <main className="mx-auto w-full max-w-7xl flex-1 px-6 py-10 font-serif text-pink sm:px-10">
         <PlantOfHour />
         <PopularPlants />
+        <ExplorePlants />
       </main>
       {/* Footer */}
       <footer className="bg-[#4e314f] text-[#85b19b] py-3">
@@ -37,7 +38,7 @@ export default function Home() {
           <p className="text-sm">Disclaimer: Please be wary of trying a new plant due to the potential risks involved.
             Some of these plants can be toxic or cause allergic reactions.</p>
         </div>
-        </footer>
+      </footer>
     </div>
   );
 }
