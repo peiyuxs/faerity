@@ -3,7 +3,13 @@
 import { useState } from "react";
 import type { Plant } from "@/lib/plants";
 
-export default function PlantCard({ plant }: { plant: Plant }) {
+export default function PlantCard({
+  plant,
+  animate = true,
+}: {
+  plant: Plant;
+  animate?: boolean;
+}) {
   const [expanded, setExpanded] = useState(false);
   const [trackedCount, setTrackedCount] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
@@ -41,7 +47,7 @@ export default function PlantCard({ plant }: { plant: Plant }) {
   }
 
   return (
-    <article className="mx-5 flex h-60 w-40 flex-col gap-4 overflow-hidden rounded-xl bg-light-green p-6 text-dark-green shadow">
+    <article className={`${animate ? "card-fade-up " : ""}mx-5 flex h-60 w-40 flex-col gap-4 overflow-hidden rounded-xl bg-light-green p-6 text-dark-green shadow`}>
       <div className="min-h-0 flex-1 overflow-y-auto text-white">
         <h3 className="text-center text-xl leading-6 italic">
           {plant.common_names || plant.scientific_name}

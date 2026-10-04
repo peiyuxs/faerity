@@ -4,7 +4,7 @@ from pathlib import Path
 from google import genai
 from dotenv import load_dotenv
 
-load_dotenv(Path(__file__).with_name(".env"))
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 api_key = os.getenv("GEMINI_KEY")
 if not api_key:

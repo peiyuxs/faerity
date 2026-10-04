@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 import requests
 import db
 
-load_dotenv(Path(__file__).with_name("tiger-cloud-faerity-credentials.env"))
-load_dotenv(Path(__file__).with_name(".env"))
+load_dotenv(Path(__file__).resolve().parent.parent / "tiger-cloud-faerity-credentials.env")
+load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 API = "https://edibleplantdb.org/api/v1"
 HEADERS = {
