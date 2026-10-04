@@ -4,6 +4,29 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 The Python script connects to Tiger Cloud using `asyncpg`. Use Python 3.10 or newer. Run these commands from the project folder (the folder containing `requirements.txt`).
 
+## Plant sections and click tracking
+
+The homepage loads plants from the PostgreSQL `plants` table. The featured plant
+is selected deterministically from a hash of the current UTC hour, so every
+visitor sees the same plant during an hour and the selection changes hourly
+(daily rotation can be restored by changing the bucket to a UTC day). Popular
+plants are sorted by `click_count` descending, `last_clicked_at` descending with
+null timestamps last, then common name alphabetically (scientific name when the
+common name is empty).
+
+The first setup against an existing database must apply
+[`database/migrations/001_plant_click_tracking.sql`](database/migrations/001_plant_click_tracking.sql)
+once. It adds `click_count` and `last_clicked_at` and creates the ranking index.
+The local Next.js server loads connection settings from the ignored
+`tiger-cloud-faerity-credentials.env` file; deployed environments should provide
+the equivalent `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and
+`PGSSLMODE` environment variables (or `TIMESCALE_SERVICE_URL`).
+
+The PostgreSQL client honors `PGSSLMODE`. `require` encrypts traffic but does not
+verify the server certificate unless the connection string also provides a
+trusted root certificate. For certificate and hostname verification, use
+`PGSSLMODE=verify-full` and configure the database provider's trusted CA.
+
 ### 1. Create the virtual environment
 
 Create it once per checkout. On Windows, use PowerShell:
