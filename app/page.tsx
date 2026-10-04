@@ -1,12 +1,17 @@
 'use client';
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 export default function Home() {
+  const [items, setItems] = useState([]);
+  const [dataIsLoaded, setDataIsLoaded] = useState(false);
+
+  
 
   const slides = [
-    { title: "Slide 1", text: "This is the first slide content." },
-    { title: "Slide 2", text: "This is the second slide content." },
-    { title: "Slide 3", text: "This is the third slide content." },
+
+    { name: "Name", recipe: "This is the first slide content." },
+    { name: "Name", recipe: "This is the second slide content." },
+    { name: "Name", recipe: "This is the third slide content." },
   ];
 
   const [index, setIndex] = useState(0);
@@ -17,9 +22,10 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-gray-100">
 
       {/* Banner */}
-      <header className="bg-[#4e314f] text-white py-20">
-        <div className="max-w-6xl mx-auto px-5">
-          <h1 className="text-2xl font-semibold" style={{color: 'var(--foreground)', textAlign: 'center'}}>
+      <header className="Banner bg-[#4e314f] text-white h-[100vh]">
+        <div className="max-w-6xl mx-auto px-5" style={{}}>
+          <div className="fae "></div>
+          <h1 className="faerity text-5xl font-semibold" style={{ textAlign: 'center'}}>
             Faerity
           </h1>
         </div>
@@ -36,8 +42,8 @@ export default function Home() {
           >
             {slides.map((slide, i) => (
               <div key={i} className="min-w-full bg-white rounded-lg shadow p-6">
-                <h3 className="text-xl font-semibold mb-2">{slide.title}</h3>
-                <p className="text-gray-600">{slide.text}</p>
+                <h3 className="text-xl font-semibold mb-2">{slide.name}</h3>
+                <p className="text-gray-600">{slide.recipe}</p>
               </div>
             ))}
           </div>
@@ -60,7 +66,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-300 py-6">
+      <footer className="bg-[#4e314f] text-[#85b19b] py-3">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <p className="text-sm">Disclaimer: Please be wary of trying a new plant due to the potential risks involved.
             Some of these plants can be toxic or cause allergic reactions.</p>
