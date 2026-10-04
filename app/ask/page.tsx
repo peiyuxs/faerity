@@ -31,29 +31,29 @@ export default function AskPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
-      <header className="bg-[#4e314f] text-white py-10">
-        <h1 className="text-2xl font-semibold text-center">Ask Faerity</h1>
+    <div className="min-h-screen flex flex-col">
+      {/* Banner */}
+      <header className="Banner text-white h-30 flex items-center gap-8 pl-6 pr-10">
+        <div className="flex flex-row items-center h-full w-auto gap-2">
+          <div className="fae h-full w-28 shrink-0"></div> {/* Image */}
+          <h1 className="faerity shrink-0 text-4xl sm:text-5xl text-pink">
+            Faerity
+          </h1>
+        </div>
+        
+        <div className="SearchBar min-w-0 flex-1">
+          <form onSubmit={handleSubmit}>
+            <input className="h-12 w-full font-serif text-dark-green"
+              id="searchInput"
+              type="text"
+              placeholder="I know everything..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </form>
+        </div>
       </header>
-
       <main className="max-w-2xl mx-auto px-4 py-10 flex-1 w-full">
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="e.g. Give me a recipe using dandelion greens"
-            className="w-full p-3 rounded border border-gray-300 text-gray-800"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-3 px-6 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 disabled:opacity-50"
-          >
-            {loading ? "Generating..." : "Ask Gemini"}
-          </button>
-        </form>
-
         {result && (
           <div className="mt-6 bg-white rounded-lg shadow p-6 text-gray-700 whitespace-pre-wrap">
             {result}
