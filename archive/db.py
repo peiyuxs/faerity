@@ -5,7 +5,7 @@ import asyncpg
 from dotenv import load_dotenv
 
 
-load_dotenv(Path(__file__).with_name("tiger-cloud-faerity-credentials.env"))
+load_dotenv(Path(__file__).resolve().parent.parent / "tiger-cloud-faerity-credentials.env")
 
 FIELDS = ["id", "scientific_name", "common_names", "family", "edible_portion", "edible_uses", "description", "found_in", "thumbnail"]
 

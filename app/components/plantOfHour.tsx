@@ -4,10 +4,9 @@ import { useEffect, useState } from "react";
 import PlantCard from "@/app/components/plantCard";
 import type { Plant } from "@/lib/plants";
 
-const HOUR_MS = 60 * 60 * 1000;
-
 export default function PlantOfHour() {
   const [plant, setPlant] = useState<Plant | null>(null);
+  const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,16 +16,20 @@ export default function PlantOfHour() {
 
     async function loadFeaturedPlant() {
       try {
-        const response = await fetch("/api/plants/featured", {
-          cache: "no-store",
-        });
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        const response = await fetch(
+          `/api/plants/featured?timeZone=${encodeURIComponent(timeZone)}`,
+          { cache: "no-store" },
+        );
         if (!response.ok) {
           throw new Error(`Featured plant request failed: ${response.status}`);
         }
 
-        const result: { plant: Plant | null } = await response.json();
+        const result: { plant: Plant | null; reason: string } =
+          await response.json();
         if (!cancelled) {
           setPlant(result.plant);
+          setReason(result.reason);
           setError("");
         }
       } catch (cause) {
@@ -46,7 +49,9 @@ export default function PlantOfHour() {
         return;
       }
 
-      const untilNextHour = HOUR_MS - (Date.now() % HOUR_MS) + 100;
+      const nextHour = new Date();
+      nextHour.setHours(nextHour.getHours() + 1, 0, 0, 100);
+      const untilNextHour = nextHour.getTime() - Date.now();
       refreshTimer = setTimeout(() => {
         void loadFeaturedPlant().then(scheduleRefresh);
       }, untilNextHour);
@@ -66,12 +71,18 @@ export default function PlantOfHour() {
       <h2 id="plant-of-hour-title" className="mb-6 text-6xl sm:text-8xl">
         Plant of the Hour
       </h2>
-      {loading && <p role="status">Finding tohour&apos;s plant...</p>}
+      {loading && <p role="status">Deciding on the current hour's plant...</p>}
       {!loading && error && <p role="alert">{error}</p>}
       {!loading && !error && !plant && <p>No plants are available yet.</p>}
       {plant && (
-        <div className="flex justify-center">
+        <div className="flex flex-col items-center gap-8 sm:flex-row sm:items-center">
           <PlantCard plant={plant} />
+          <div className="max-w-2xl">
+            <h3 className="text-4xl text-pink">
+              {plant.common_names || plant.scientific_name}
+            </h3>
+            <p className="mt-3 text-lg leading-relaxed text-white">{reason}</p>
+          </div>
         </div>
       )}
     </section>
