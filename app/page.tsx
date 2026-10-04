@@ -48,11 +48,11 @@ export default function Home() {
       <div className="info">
         {/* Carousel */}
         <main className="max-w-6xl mx-auto px-4 py-10 flex-1">
-          <h2 className="text-3xl font-bold mb-6 text-gray-800">Popular Recipes</h2>
+          <h2 className="text-3xl font-bold mb-6 text-#EEC0F0">Popular Recipes</h2>
 
-          <div className="relative overflow-hidden">
+          <div className="carousel relative overflow-hidden">
             <div
-              className="flex transition-transform duration-500"
+              className="card flex transition-transform duration-500"
               style={{ transform: `translateX(-${index * 100}%)` }}
             >
               {slides.map((slide, i) => (

@@ -26,6 +26,10 @@ input{
   border-radius: 0.25rem;
   width: 75%;
 }
+.info{
+  background-color: #85b19b;
+  color: #EEC0F0;
+}
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -60,6 +64,15 @@ input{
 p{
   color:white;
   font-family: tangerine-regular;
+}
+.carousel {
+  background-color:#EEC0F0;
+}
+.card{
+  margin: 2vh;
+  margin-right: 3vh;
+  background-color: #85b19b;
+  color: #EEC0F0;
 }
 body {
   background: #384438;
