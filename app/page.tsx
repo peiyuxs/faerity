@@ -1,74 +1,50 @@
-'use client';
-import { useState } from "react";
+import { ViewTransition } from "react";
+import PlantOfHour from "@/app/components/plantOfHour";
+import PopularPlants from "@/app/components/popularPlants";
+import ExplorePlants from "@/app/components/explorePlants";
+import SearchBar from "@/app/components/searchBar";
+import Link from "next/link";
+
 export default function Home() {
-
-  // Carousel  logic
-  const slides = [
-    { name: "Lorem ipsum", img: "https://cms.interiorcompany.com/wp-content/uploads/2024/01/blue-puya-unique-flowers.jpg"},
-    { name: "Dolor amet", img: "https://images3.alphacoders.com/700/700973.jpg" },
-    { name: "Sigma rizzler", img: "https://en.bcdn.biz/Images/2016/12/6/ed154ed8-77b5-4452-930c-ba42068e8116.jpg" },
-    { name: "Lorem ipsum", img: "https://cms.interiorcompany.com/wp-content/uploads/2024/01/blue-puya-unique-flowers.jpg"},
-    { name: "Dolor amet", img: "https://images3.alphacoders.com/700/700973.jpg" },
-    { name: "Sigma rizzler", img: "https://en.bcdn.biz/Images/2016/12/6/ed154ed8-77b5-4452-930c-ba42068e8116.jpg" },
-    { name: "Lorem ipsum", img: "https://cms.interiorcompany.com/wp-content/uploads/2024/01/blue-puya-unique-flowers.jpg"},
-    { name: "Dolor amet", img: "https://images3.alphacoders.com/700/700973.jpg" },
-    { name: "Sigma rizzler", img: "https://en.bcdn.biz/Images/2016/12/6/ed154ed8-77b5-4452-930c-ba42068e8116.jpg" },
-  ];
-  const [index, setIndex] = useState(0);
-  const next = () => setIndex((index + 1) % slides.length);
-  const prev = () => setIndex((index - 1 + slides.length) % slides.length);
-
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Banner */}
-      <header className="Banner text-white h-[100vh] flex flex-col justify-center">
-        <div className="fae h-[35vh]"></div> {/* Image */}
-        <h1 className="faerity text-[10rem] text-pink text-center leading-15">
-          Faerity
-        </h1>
-        <div className="flex flex-col justify-center w-full">
-          <p className="text-4xl font-serif text-center italic mt-10">
-            Hey, it's me, it's Faerity! I know everything...
-          </p>
-          <div className="SearchBar flex justify-center py-5">
-            <input className="h-[7vh] w-[75vw] font-serif text-dark-green"
-              id="searchInput"
-              type="text"
-              placeholder="I know about a million things..."
-            />
+      <ViewTransition enter="fade-in" exit="fade-in" default="none">
+        <header className="Banner header-fade-in text-white h-[100vh] flex flex-col justify-center">
+          <div className="fae h-[35vh]"></div>
+          <Link href="/" aria-label="Faerity home">
+            <h1 className="faerity text-[10rem] text-pink text-center leading-15">
+              Faerity
+            </h1>
+          </Link>
+          <div className="flex flex-col justify-center w-full">
+            <p className="text-4xl font-serif text-center italic mt-10">
+              Hey, it&apos;s me, it&apos;s Faerity! I know everything...
+            </p>
+            <form action="/ask" method="get" className="flex justify-center py-5">
+              <SearchBar className="h-[7vh] w-[75vw]" />
+            </form>
+            <p className="text-lg font-serif text-center italic pb-10">
+              about plants
+            </p>
           </div>
-          <p className="text-lg font-serif text-center italic pb-10">about plants</p>
-        </div>
-      </header>
-      <div className="font-serif text-pink px-20">
-        {/* Carousel */}
-        <main className="py-10">
-          <h2 className="text-8xl mb-6">Popular Plants</h2>
-          <div className="carousel relative overflow-hidden">
-            <button onClick={prev} aria-label="Previous plant" className="absolute left-3 top-1/2 z-10 -translate-y-1/2 border-y-[14px] border-y-transparent border-r-[20px] border-r-pink" />
-            <button onClick={next} aria-label="Next plant" className="absolute right-3 top-1/2 z-10 -translate-y-1/2 border-y-[14px] border-y-transparent border-l-[20px] border-l-pink" />
-            <div className="card flex flex-row gap-5 transition-transform duration-500"
-              style={{ transform: `translateX(-${index * 100}%)` }}
-            >
-              {slides.map((slide, i) => (
-                <div key={i} className="flex flex-col p-12 gap-5 bg-light-green rounded-lg shadow">
-                  <h3 className="text-4xl text-center text-white italic leading-10">{slide.name}</h3>
-                  <img src={slide.img} className="h-50 w-40 object-cover" /> {/* Image */}
-                  <button className="w-full bg-light-pink rounded-xl text-dark-green text-center p-2">Learn more</button>
-                </div>
-              ))}
-            </div>
-
-          </div>
+        </header>
+      </ViewTransition>
+      <ViewTransition enter="fade-up" exit="fade-up" default="none">
+        <main className="page-fade-up mx-auto w-full max-w-7xl flex-1 px-6 py-10 font-serif text-pink sm:px-10">
+          <PlantOfHour />
+          <PopularPlants />
+          <ExplorePlants />
         </main>
-      </div>
-      {/* Footer */}
-      <footer className="bg-[#4e314f] text-[#85b19b] py-3">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-sm">Disclaimer: Please be wary of trying a new plant due to the potential risks involved.
-            Some of these plants can be toxic or cause allergic reactions.</p>
+      </ViewTransition>
+      <footer className="bg-[#4e314f] py-3">
+        <div className="mx-auto max-w-6xl px-4 text-center">
+          <p className="text-md font-serif">
+            Disclaimer: Please be wary of trying a new plant due to the
+            potential risks involved. Some of these plants can be toxic or
+            cause allergic reactions.
+          </p>
         </div>
-        </footer>
+      </footer>
     </div>
   );
 }

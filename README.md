@@ -1,106 +1,49 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Python / Tiger Cloud Setup
+## Archived scripts
 
-The Python script connects to Tiger Cloud using `asyncpg`. Use Python 3.10 or newer. Run these commands from the project folder (the folder containing `requirements.txt`).
+The legacy Python database/seed scripts, their Python requirements, unused
+dummy Gemini endpoint, and unreferenced older `Card` component are in
+[`archive/`](archive/). The Next.js app does not need them to run: PostgreSQL
+access is implemented in `lib/db.ts`, and plant search is handled by
+`/api/plants/search`. These files are retained only for reference and one-off
+legacy data work.
 
-### 1. Create the virtual environment
+## Plant sections and click tracking
 
-Create it once per checkout. On Windows, use PowerShell:
+The homepage loads plants from the PostgreSQL `plants` table. Gemini chooses a
+featured plant using the visitor's local date and time, season, and relevant
+holiday or symbolism, and provides a short explanation. The hourly choice is
+cached by the server process. No live weather data is used. Popular plants are
+sorted by `click_count` descending, `last_clicked_at` descending with null
+timestamps last, then common name alphabetically (scientific name when the
+common name is empty).
 
-```powershell
-py -3 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-```
+The first setup against an existing database must apply
+[`database/migrations/001_plant_click_tracking.sql`](database/migrations/001_plant_click_tracking.sql)
+once. It adds `click_count` and `last_clicked_at` and creates the ranking index.
+The local Next.js server loads connection settings from the ignored
+`tiger-cloud-faerity-credentials.env` file; deployed environments should provide
+the equivalent `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and
+`PGSSLMODE` environment variables (or `TIMESCALE_SERVICE_URL`).
 
-On macOS/Linux, use a terminal:
+The PostgreSQL client honors `PGSSLMODE`. `require` encrypts traffic but does not
+verify the server certificate unless the connection string also provides a
+trusted root certificate. For certificate and hostname verification, use
+`PGSSLMODE=verify-full` and configure the database provider's trusted CA.
 
-```sh
-python3 -m venv .venv
-source .venv/bin/activate
-```
+## Gemini setup
 
-In Git Bash on Windows, activate it with `source .venv/Scripts/activate`.
+Plant search uses the `gemini-3.5-flash-lite` model through the Gemini API.
+Set `GEMINI_KEY` in the ignored project-root `.env` file. Never commit or
+share the key. Requests may incur charges.
 
-### 2. Install Python packages
-
-With the environment activated, install the dependencies:
-
-```sh
-python -m pip install -r requirements.txt
-```
-
-The environment name `(.venv)` should appear at the start of the terminal prompt. To leave it later, run `deactivate`.
-
-### 3. Add Tiger Cloud credentials
-
-Get the database credentials from the team’s approved secure channel. Copy [tiger-cloud-faerity-credentials.example.env](tiger-cloud-faerity-credentials.example.env) to `tiger-cloud-faerity-credentials.env`, then replace the example values with the real `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and `PGSSLMODE` values. Keep the real credentials file private; it is excluded from Git.
-
-Copy command in PowerShell:
-
-```powershell
-Copy-Item tiger-cloud-faerity-credentials.example.env tiger-cloud-faerity-credentials.env
-```
-
-Copy command in macOS/Linux/Git Bash:
-
-```sh
-cp tiger-cloud-faerity-credentials.example.env tiger-cloud-faerity-credentials.env
-```
-
-### 4. Test the connection
-
-With `.venv` active and the credentials file filled in, run:
-
-```sh
-python main.py
-```
-
-A successful connection prints a success message and the PostgreSQL server version. If Python cannot find a package, confirm `.venv` is active and repeat the install command. In VS Code, select `.venv/Scripts/python.exe` on Windows or `.venv/bin/python` on macOS/Linux using **Python: Select Interpreter**.
-
-Activation is optional if you invoke the environment's Python directly: on Windows run `.venv/Scripts/python.exe main.py`; on macOS/Linux run `.venv/bin/python main.py`.
-
-### 5. Set up and test Gemini (Google Cloud ADC)
-
-The organization policy shown in the console disallows API keys, so use Application Default Credentials (ADC) instead. No Gemini API key is needed. Your Google Cloud project must have billing enabled, the Vertex AI API enabled, and your account granted the **Vertex AI User** role (`roles/aiplatform.user`). Ask your Google Cloud administrator to enable/grant these if you do not have permission.
-
-1. Install the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) for Windows, then open a **new** terminal.
-2. Sign in to the CLI and choose the Google Cloud project to use:
-
-	```powershell
-	gcloud init
-	```
-
-3. Create local ADC credentials for the Python client (this opens a Google sign-in page):
-
-	```powershell
-	gcloud auth application-default login
-	```
-
-	`gcloud init` alone is not enough; Python client libraries use the separate ADC login above.
-
-4. In the project-root `.env` file, set your Google Cloud **project ID** (not its display name) and the location approved for your model. The default in this script is `global`:
-
-	```dotenv
-	GOOGLE_CLOUD_PROJECT=your-google-cloud-project-id
-	GOOGLE_CLOUD_LOCATION=global
-	```
-
-	The `.env` file is ignored by Git. Do not put credentials in it or commit it. Remove the old `GEMINI_KEY` entry; API-key authentication is not used by this script.
-
-5. With `.venv` active, test it from the project folder:
-
-	```powershell
-	python gemini.py
-	```
-
-	Or without activating the environment:
-
-	```powershell
-	.\.venv\Scripts\python.exe gemini.py
-	```
-
-The script should print Gemini's response. Requests go through the selected Google Cloud project and may incur charges. For teammates, each person should install the CLI and run the ADC login with their own Google account; do not share ADC credential files. See Google's [ADC setup](https://docs.cloud.google.com/docs/authentication/provide-credentials-adc) and [Agent Platform quickstart](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/start) for details.
+The `/ask` search makes one Gemini request per search to plan its three result
+groups. Set `USE_GEMINI_SEARCH` to `false` in `lib/geminiPlantSearch.ts` to
+skip Gemini; direct plant-name matches still work, but related and in-season
+suggestions are omitted.
+The homepage's Plant of the Hour also uses Gemini through
+`lib/geminiPlantOfHour.ts`.
 
 ## Getting Started
 
