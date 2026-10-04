@@ -16,9 +16,16 @@
   --background: #4e314f;
   --background-image: url('../public/whimsybackground.jpg');
   --foreground: #85b19b;
-  --fae-image: url('../public/fae.png');
+  --fae-image: url('../public/faerity.png');
 }
-
+input{
+  color: #EEC0F0;
+  background-color: #85b19b75;
+  border: 2px solid #EEC0F0;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  width: 75%;
+}
 @theme inline {
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -33,14 +40,27 @@
 .fae{
   padding-top: 50vh;
   background-image: var(--fae-image);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
   font-family: 'Tangerine', cursive;
 }
 .faerity{
-  padding-top: 50vh;
+  padding-top: 1vh;
   color: #EEC0F0;
   font-family: 'Tangerine', cursive;
 }
-
+.SearchBar{
+  padding-top: 1vh;
+  color: #EEC0F0;
+  height: 7vh;
+  font-family: 'Tangerine', cursive;
+}
+p{
+  color:white;
+  font-family: tangerine-regular;
+}
 body {
   background: #384438;
   color: #EEC0F0;
