@@ -1,7 +1,23 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import type { Plant } from "@/lib/plants";
+
+function getThumbnailUrl(thumbnail: string | null): string | null {
+  if (!thumbnail) {
+    return null;
+  }
+
+  try {
+    const url = new URL(thumbnail.trim());
+    return url.protocol === "http:" || url.protocol === "https:"
+      ? url.toString()
+      : null;
+  } catch {
+    return null;
+  }
+}
 
 export default function PlantCard({
   plant,
@@ -14,6 +30,7 @@ export default function PlantCard({
   const [trackedCount, setTrackedCount] = useState<number | null>(null);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+  const thumbnailUrl = getThumbnailUrl(plant.thumbnail);
   const clickCount =
     trackedCount === null
       ? plant.click_count
@@ -47,7 +64,9 @@ export default function PlantCard({
   }
 
   return (
-    <article className={`${animate ? "card-fade-up " : ""}mx-5 flex h-60 w-40 flex-col gap-4 overflow-hidden rounded-xl bg-light-green p-6 text-dark-green shadow`}>
+    <article
+      className={`${animate ? "card-fade-up " : ""}mx-5 flex h-60 w-40 flex-col gap-3 overflow-hidden rounded-xl bg-light-green p-5 text-dark-green shadow`}
+    >
       <div className="min-h-0 flex-1 overflow-y-auto text-white">
         <h3 className="text-center text-xl leading-6 italic">
           {plant.common_names || plant.scientific_name}
@@ -56,6 +75,16 @@ export default function PlantCard({
           <p className="mt-1 text-center text-sm italic text-white/80">
             {plant.scientific_name}
           </p>
+        )}
+        {thumbnailUrl && (
+          <Image
+            src={thumbnailUrl}
+            alt={`Plant: ${plant.common_names || plant.scientific_name}`}
+            width={320}
+            height={200}
+            unoptimized
+            className="mt-3 h-24 w-full rounded-lg object-cover"
+          />
         )}
         <p className="mt-3 text-sm">
           <span className="font-semibold">Family:</span>{" "}
@@ -91,6 +120,12 @@ export default function PlantCard({
               )}
             </dl>
           )}
+        {plant.image_attribution && (
+          <p className="mt-2 text-xs text-white/70">
+            Photo: {plant.image_attribution}
+            {plant.image_license ? ` (${plant.image_license})` : ""}
+          </p>
+        )}
       </div>
       <p className="shrink-0 text-sm font-semibold text-white">
         {clickCount} {clickCount === 1 ? "click" : "clicks"}

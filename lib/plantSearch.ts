@@ -7,7 +7,8 @@ export type PlantSearchCandidate = Pick<
 >;
 
 const plantFields = `id, scientific_name, common_names, family, edible_portion,
-                     edible_uses, description, found_in, click_count, last_clicked_at`;
+                     edible_uses, description, found_in, thumbnail,
+                     image_attribution, image_license, click_count, last_clicked_at`;
 
 export async function getPlantSearchCatalog(): Promise<PlantSearchCandidate[]> {
   const { rows } = await pool.query<PlantSearchCandidate>(

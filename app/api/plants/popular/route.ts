@@ -4,7 +4,8 @@ export async function GET() {
   try {
     const result = await pool.query(
       `SELECT id, scientific_name, common_names, family, edible_portion,
-              edible_uses, description, found_in, click_count, last_clicked_at
+              edible_uses, description, found_in, thumbnail,
+              image_attribution, image_license, click_count, last_clicked_at
        FROM plants
        ORDER BY click_count DESC,
                 last_clicked_at DESC NULLS LAST,
