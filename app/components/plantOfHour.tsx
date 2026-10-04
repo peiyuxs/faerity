@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Card from "@/app/components/card";
+import PlantCard from "@/app/components/plantCard";
 import type { Plant } from "@/lib/plants";
 
 const HOUR_MS = 60 * 60 * 1000;
 
-export default function PlantOfDay() {
+export default function PlantOfHour() {
   const [plant, setPlant] = useState<Plant | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -62,16 +62,16 @@ export default function PlantOfDay() {
   }, []);
 
   return (
-    <section aria-labelledby="plant-of-day-title" className="py-10">
-      <h2 id="plant-of-day-title" className="mb-6 text-6xl sm:text-8xl">
-        Plant of the Day
+    <section aria-labelledby="plant-of-hour-title" className="py-10">
+      <h2 id="plant-of-hour-title" className="mb-6 text-6xl sm:text-8xl">
+        Plant of the Hour
       </h2>
-      {loading && <p role="status">Finding today&apos;s plant...</p>}
+      {loading && <p role="status">Finding tohour&apos;s plant...</p>}
       {!loading && error && <p role="alert">{error}</p>}
       {!loading && !error && !plant && <p>No plants are available yet.</p>}
       {plant && (
-        <div className="mx-auto max-w-xl">
-          <Card plant={plant} />
+        <div className="flex justify-center">
+          <PlantCard plant={plant} />
         </div>
       )}
     </section>
