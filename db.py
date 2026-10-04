@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).with_name("tiger-cloud-faerity-credentials.env"))
 
-FIELDS = ["id", "scientific_name", "common_names", "family", "edible_portion", "edible_uses", "description", "found_in"]
+FIELDS = ["id", "scientific_name", "common_names", "family", "edible_portion", "edible_uses", "description", "found_in", "thumbnail"]
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS plants(
@@ -19,6 +19,9 @@ CREATE TABLE IF NOT EXISTS plants(
     edible_uses TEXT,
     description TEXT,
     found_in TEXT,
+    thumbnail TEXT,
+    click_count INTEGER NOT NULL DEFAULT 0 CHECK (click_count >= 0),
+    last_clicked_at TIMESTAMPTZ,
     fetched_at TIMESTAMPTZ DEFAULT now()
 );
 """
