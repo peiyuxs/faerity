@@ -87,7 +87,7 @@ export default function Card({ plant }: { plant: Plant }) {
           </dl>
         )}
       <p className="mt-auto text-sm font-semibold">
-        {clickCount} {clickCount === 1 ? "click" : "clicks"}
+        {clickCount} {clickCount === 1 ? "view" : "views"}
       </p>
       <button
         type="button"
