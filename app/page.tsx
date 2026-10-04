@@ -36,9 +36,9 @@ export default function Home() {
           <ExplorePlants />
         </main>
       </ViewTransition>
-      <footer className="bg-[#4e314f] py-3 text-[#85b19b]">
+      <footer className="bg-[#4e314f] py-3">
         <div className="mx-auto max-w-6xl px-4 text-center">
-          <p className="text-sm">
+          <p className="text-md font-serif">
             Disclaimer: Please be wary of trying a new plant due to the
             potential risks involved. Some of these plants can be toxic or
             cause allergic reactions.

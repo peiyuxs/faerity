@@ -11,12 +11,12 @@ legacy data work.
 
 ## Plant sections and click tracking
 
-The homepage loads plants from the PostgreSQL `plants` table. The featured plant
-is selected deterministically from a hash of the current UTC hour, so every
-visitor sees the same plant during an hour and the selection changes hourly
-(daily rotation can be restored by changing the bucket to a UTC day). Popular
-plants are sorted by `click_count` descending, `last_clicked_at` descending with
-null timestamps last, then common name alphabetically (scientific name when the
+The homepage loads plants from the PostgreSQL `plants` table. Gemini chooses a
+featured plant using the visitor's local date and time, season, and relevant
+holiday or symbolism, and provides a short explanation. The hourly choice is
+cached by the server process. No live weather data is used. Popular plants are
+sorted by `click_count` descending, `last_clicked_at` descending with null
+timestamps last, then common name alphabetically (scientific name when the
 common name is empty).
 
 The first setup against an existing database must apply
@@ -42,6 +42,8 @@ The `/ask` search makes one Gemini request per search to plan its three result
 groups. Set `USE_GEMINI_SEARCH` to `false` in `lib/geminiPlantSearch.ts` to
 skip Gemini; direct plant-name matches still work, but related and in-season
 suggestions are omitted.
+The homepage's Plant of the Hour also uses Gemini through
+`lib/geminiPlantOfHour.ts`.
 
 ## Getting Started
 
