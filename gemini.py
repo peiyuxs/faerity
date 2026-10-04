@@ -13,6 +13,6 @@ if not api_key:
 with genai.Client(api_key=api_key) as client:
     interaction = client.interactions.create(
         model="gemini-3.5-flash-lite",
-        input="Explain how AI works in a few words",
+        input="write a short haiku about toads",
     )
     print(interaction.output_text)
