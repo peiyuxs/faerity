@@ -40,7 +40,7 @@ share the key. Requests may incur charges.
 
 The `/ask` search makes one Gemini request per search to plan its three result
 groups. Set `USE_GEMINI_SEARCH` to `false` in `lib/geminiPlantSearch.ts` to
-skip Gemini; direct database search still works, but related and in-season
+skip Gemini; direct plant-name matches still work, but related and in-season
 suggestions are omitted.
 
 ## Getting Started

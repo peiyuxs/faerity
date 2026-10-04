@@ -1,5 +1,5 @@
 import { makePlantSearchPlan } from "@/lib/geminiPlantSearch";
-import { searchPlants } from "@/lib/plantSearch";
+import { getPlantSearchCatalog, getPlantsByIds } from "@/lib/plantSearch";
 
 export async function POST(request: Request) {
   let body: unknown;
@@ -23,26 +23,27 @@ export async function POST(request: Request) {
   }
 
   try {
+    const plants = await getPlantSearchCatalog();
     const month = new Intl.DateTimeFormat("en-US", {
       month: "long",
       timeZone: "UTC",
     }).format(new Date());
-    const plan = await makePlantSearchPlan(query.trim(), month);
-    const results = await searchPlants(plan.results);
-    const suggestions = await searchPlants(
-      plan.suggestions,
-      results.map((plant) => plant.id),
+    const plan = await makePlantSearchPlan(
+      query.trim(),
+      month,
+      plants,
     );
-    const inSeason = await searchPlants(
-      plan.inSeason,
-      results.map((plant) => plant.id),
-    );
+    const [results, suggestions, inSeason] = await Promise.all([
+      getPlantsByIds(plan.results),
+      getPlantsByIds(plan.suggestions),
+      getPlantsByIds(plan.inSeason),
+    ]);
 
     return Response.json({
       results,
       suggestions,
       inSeason,
-      seasonNote: "Seasonality is inferred and may vary by location.",
+      seasonNote: "Seasonality is an estimate for a temperate Northern Hemisphere climate.",
     });
   } catch (error) {
     console.error("Plant search failed:", error);

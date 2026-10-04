@@ -1,42 +1,34 @@
 import { pool } from "@/lib/db";
 import type { Plant } from "@/lib/plants";
 
-const SEARCHABLE_COLUMNS = [
-  "scientific_name",
-  "common_names",
-  "family",
-  "edible_portion",
-  "edible_uses",
-  "description",
-  "found_in",
-] as const;
+export type PlantSearchCandidate = Pick<
+  Plant,
+  "id" | "scientific_name" | "common_names"
+>;
 
-export async function searchPlants(
-  terms: string[],
-  excludedIds: number[] = [],
-): Promise<Plant[]> {
-  if (terms.length === 0) return [];
+const plantFields = `id, scientific_name, common_names, family, edible_portion,
+                     edible_uses, description, found_in, click_count, last_clicked_at`;
 
-  const values: (string | number[])[] = [];
-  const conditions = terms.flatMap((term) => {
-    const parameter = `$${values.push(`%${term}%`)}`;
-    return SEARCHABLE_COLUMNS.map(
-      (column) => `COALESCE(${column}, '') ILIKE ${parameter}`,
-    );
-  });
+export async function getPlantSearchCatalog(): Promise<PlantSearchCandidate[]> {
+  const { rows } = await pool.query<PlantSearchCandidate>(
+    `SELECT id, scientific_name, common_names
+     FROM plants
+     ORDER BY id
+     LIMIT 500`,
+  );
 
-  values.push(excludedIds);
-  const excludeParameter = `$${values.length}`;
+  return rows;
+}
+
+export async function getPlantsByIds(ids: number[]): Promise<Plant[]> {
+  if (ids.length === 0) return [];
 
   const { rows } = await pool.query<Plant>(
-    `SELECT id, scientific_name, common_names, family, edible_portion,
-            edible_uses, description, found_in, click_count, last_clicked_at
+    `SELECT ${plantFields}
      FROM plants
-     WHERE (${conditions.join(" OR ")})
-       AND id <> ALL(${excludeParameter}::int[])
-     ORDER BY click_count DESC, id
-     LIMIT 100`,
-    values,
+     WHERE id = ANY($1::int[])
+     ORDER BY array_position($1::int[], id)`,
+    [ids],
   );
 
   return rows;

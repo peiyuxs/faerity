@@ -103,24 +103,30 @@ export default function AskForm({ initialQuery }: { initialQuery: string }) {
             </p>
           )}
           {searchResults && (
-            <>
-              <PlantResultsSection
-                key={`${searchVersion}-results`}
-                title="Search results"
-                plants={searchResults.results}
-              />
-              <PlantResultsSection
-                key={`${searchVersion}-suggestions`}
-                title="You may also like..."
-                plants={searchResults.suggestions}
-              />
-              <PlantResultsSection
-                key={`${searchVersion}-in-season`}
-                title="In season"
-                plants={searchResults.inSeason}
-                note={searchResults.seasonNote}
-              />
-            </>
+            searchResults.results.length === 0 &&
+            searchResults.suggestions.length === 0 &&
+            searchResults.inSeason.length === 0 ? (
+              <p className="mt-6 text-light-green">No results</p>
+            ) : (
+              <>
+                <PlantResultsSection
+                  key={`${searchVersion}-results`}
+                  title="Search results"
+                  plants={searchResults.results}
+                />
+                <PlantResultsSection
+                  key={`${searchVersion}-suggestions`}
+                  title="You may also like..."
+                  plants={searchResults.suggestions}
+                />
+                <PlantResultsSection
+                  key={`${searchVersion}-in-season`}
+                  title="In season"
+                  plants={searchResults.inSeason}
+                  note={searchResults.seasonNote}
+                />
+              </>
+            )
           )}
         </main>
       </ViewTransition>

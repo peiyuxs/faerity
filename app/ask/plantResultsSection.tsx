@@ -24,7 +24,7 @@ export default function PlantResultsSection({
       <h2 className="text-6xl">{title}</h2>
       {note && <p className="mt-1 text-sm text-dark-green/70">{note}</p>}
       {plants.length === 0 ? (
-        <p className="mt-4 text-dark-green/80">No matching plants found.</p>
+        <p className="mt-4 text-pink/80">No matching plants found.</p>
       ) : (
         <>
           <div className="mt-6 grid grid-cols-2 justify-items-center gap-y-6 sm:grid-cols-3 lg:grid-cols-4">
