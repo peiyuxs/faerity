@@ -37,7 +37,8 @@ async def main():
             if item["id"] in existing:
                 continue  # already have it, no request spent
             p = api_get(f"/plants/{item['id']}")
-            rows.append(tuple(p.get(f) for f in db.FIELDS))
+            data = {**p, "thumbnail": item.get("thumbnail")}
+            rows.append(tuple(data.get(f) for f in db.FIELDS))
             time.sleep(0.2)
         await db.upsert_plants(rows)
         print(f"{family}: inserted {len(rows)}")
