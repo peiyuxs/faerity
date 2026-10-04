@@ -14,6 +14,69 @@
   --background: var(--color-dark-green);
   --background-image: url('../public/whimsybackground.jpg');
   --fae-image: url('../public/faerity.png');
+  --fade-up-duration: 550ms;
+  --fade-up-distance: 16px;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fade-up-distance));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.header-fade-in {
+  animation: fade-in var(--fade-up-duration) ease-out both;
+}
+
+.page-fade-up,
+.card-fade-up {
+  animation: fade-up var(--fade-up-duration) ease-out both;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fade-out {
+  to { opacity: 0; }
+}
+
+::view-transition-old(.fade-up) {
+  animation: fade-out 180ms ease-in both;
+}
+
+::view-transition-new(.fade-up) {
+  animation: fade-up var(--fade-up-duration) ease-out both;
+}
+
+::view-transition-old(.fade-in) {
+  animation: fade-out 180ms ease-in both;
+}
+
+::view-transition-new(.fade-in) {
+  animation: fade-in var(--fade-up-duration) ease-out both;
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-fade-in,
+  .page-fade-up,
+  .card-fade-up,
+  ::view-transition-old(*),
+  ::view-transition-new(*),
+  ::view-transition-group(*) {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
 }
 
 input {

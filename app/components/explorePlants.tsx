@@ -5,6 +5,8 @@ import Marquee from "react-fast-marquee";
 import PlantCard from "@/app/components/plantCard";
 import type { Plant } from "@/lib/plants";
 
+const ANIMATED_CARD_LIMIT = 10;
+
 export default function ExplorePlants() {
   const [plants, setPlants] = useState<Plant[]>([]);
   const [loading, setLoading] = useState(true);
@@ -80,8 +82,12 @@ export default function ExplorePlants() {
           gradient={false}
           className="py-2"
         >
-          {plants.map((plant) => (
-            <PlantCard key={plant.id} plant={plant} />
+          {plants.map((plant, index) => (
+            <PlantCard
+              key={plant.id}
+              plant={plant}
+              animate={index < ANIMATED_CARD_LIMIT}
+            />
           ))}
         </Marquee>
       )}
