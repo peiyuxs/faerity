@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+<<<<<<< Updated upstream
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -17,6 +18,50 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+=======
+@theme {
+  --font-cursive: var(--font-ingrid-darling);
+  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-inter);
+  --color-pink: #EEC0F0;
+  --color-light-pink: #ECE6F0;
+  --color-dark-green: #384438;
+  --color-light-green: #697969;
+}
+
+:root {
+  --background: var(--color-dark-green);
+  --background-image: url('../public/whimsybackground.jpg');
+  --fae-image: url('../public/faerity.png');
+}
+
+input {
+  color: var(--color-dark-green);
+  background-color: var(--color-light-pink);
+  padding: 1rem;
+  border-radius: 2rem;
+}
+
+.Banner {
+  background-image: var(--background-image);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-attachment: fixed; 
+  background-size: cover;
+}
+
+.fae {
+  background-image: var(--fae-image);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: transparent;
+}
+
+.faerity {
+  font-family: var(--font-cursive);
+  padding: 0;
+>>>>>>> Stashed changes
 }
 
 body {

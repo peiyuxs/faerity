@@ -1,0 +1,65 @@
+"use client";
+
+import { useState } from "react";
+
+export default function AskPage() {
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    setLoading(true);
+    setResult("");
+
+    try {
+      const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: input }),
+      });
+
+      const data = await res.json();
+      setResult(data.error ? `Error: ${data.error}` : data.result);
+    } catch {
+      setResult("Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      {/* Banner */}
+      <header className="Banner text-white h-30 flex items-center gap-8 pl-6 pr-10">
+        <div className="flex flex-row items-center h-full w-auto gap-2">
+          <div className="fae h-full w-28 shrink-0"></div> {/* Image */}
+          <h1 className="faerity shrink-0 text-4xl sm:text-5xl text-pink">
+            Faerity
+          </h1>
+        </div>
+        
+        <div className="SearchBar min-w-0 flex-1">
+          <form onSubmit={handleSubmit}>
+            <input className="h-12 w-full font-serif text-dark-green"
+              id="searchInput"
+              type="text"
+              placeholder="I know everything..."
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+          </form>
+        </div>
+      </header>
+      <main className="max-w-2xl mx-auto px-4 py-10 flex-1 w-full">
+        {result && (
+          <div className="mt-6 bg-white rounded-lg shadow p-6 text-gray-700 whitespace-pre-wrap">
+            {result}
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
