@@ -9,19 +9,20 @@ access is implemented in `lib/db.ts`, and plant search is handled by
 `/api/plants/search`. These files are retained only for reference and one-off
 legacy data work.
 
-## Plant sections and click tracking
+## Plant sections and views
 
 The homepage loads plants from the PostgreSQL `plants` table. Gemini chooses a
 featured plant using the visitor's local date and time, season, and relevant
 holiday or symbolism, and provides a short explanation. The hourly choice is
 cached by the server process. No live weather data is used. Popular plants are
-sorted by `click_count` descending, `last_clicked_at` descending with null
+sorted by view count (`click_count`) descending, `last_clicked_at` descending with null
 timestamps last, then common name alphabetically (scientific name when the
 common name is empty).
 
 The first setup against an existing database must apply
 [`database/migrations/001_plant_click_tracking.sql`](database/migrations/001_plant_click_tracking.sql)
-once. It adds `click_count` and `last_clicked_at` and creates the ranking index.
+once. It adds the view-count field `click_count` and `last_clicked_at` and
+creates the ranking index.
 The local Next.js server loads connection settings from the ignored
 `tiger-cloud-faerity-credentials.env` file; deployed environments should provide
 the equivalent `PGHOST`, `PGPORT`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, and
@@ -44,6 +45,9 @@ skip Gemini; direct plant-name matches still work, but related and in-season
 suggestions are omitted.
 The homepage's Plant of the Hour also uses Gemini through
 `lib/geminiPlantOfHour.ts`.
+
+Plant cards link to `/plants/[id]`, which shows the full plant record and an
+image placeholder until plant photography is added.
 
 ## Getting Started
 
